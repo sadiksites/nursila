@@ -715,3 +715,43 @@ a:hover { color: var(--r-violet-ink); }
 .group-card figcaption { text-align: center; font-weight: 600; margin-top: .5rem; }
 .hero-photo{margin:1.5rem 0 0;max-width:640px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);border:3px solid #fff}
 .hero-photo img{display:block;width:100%;height:auto}
+
+.photo-ph.has-photos {
+  aspect-ratio: auto;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-weight: inherit;
+  display: grid;
+  gap: 1rem;
+  max-width: 520px;
+}
+.photo-ph.has-photos.team-photos {
+  max-width: 520px;
+}
+@media (min-width: 600px) {
+  .photo-ph.has-photos.team-photos {
+    max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.photo-ph.has-photos .gallery-item {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--cream-2);
+}
+.photo-ph.has-photos .gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.photo-ph.has-photos figcaption {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-weight: 600;
+  font-size: .9rem;
+  margin: 0;
+  color: var(--muted);
+}

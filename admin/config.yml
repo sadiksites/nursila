@@ -1679,8 +1679,14 @@ collections:
         required: false
     - name: teamPhoto
       label: Фото коллектива
-      widget: image
+      label_singular: фото
+      widget: list
       required: false
+      field:
+        name: photo
+        label: Фото
+        widget: image
+        required: false
     - name: seminarPhoto
       label: Фото семинара
       widget: image

@@ -22,10 +22,41 @@
     });
   }
   function phPhoto(key, src) {
-    if (!src) return; var sp = document.querySelector('.photo-ph [data-i18n="' + key + '"]'); if (!sp) return;
-    var fig = sp.parentNode, im = document.createElement("img"); im.src = src; im.alt = "";
-    im.style.cssText = "width:100%;height:auto;object-fit:contain;display:block;border-radius:18px";
-    fig.innerHTML = ""; fig.appendChild(im); fig.style.cssText = "border:0;aspect-ratio:auto;padding:0;background:none";
+    if (!src) return;
+    var srcs = (Array.isArray(src) ? src : [src]).map(function (x) { return typeof x === "string" ? x : (x && x.photo); }).filter(Boolean);
+    if (!srcs.length) return;
+    var sp = document.querySelector('.photo-ph [data-i18n="' + key + '"]');
+    if (!sp) return;
+    var fig = sp.closest("figure") || sp.parentNode;
+    var cur = Array.prototype.map.call(fig.querySelectorAll("img"), function (im) { return im.getAttribute("src"); });
+    if (JSON.stringify(cur) === JSON.stringify(srcs)) return;
+    fig.classList.add("has-photos", "gallery");
+    fig.style.cssText = "";
+    fig.innerHTML = "";
+    srcs.forEach(function (s) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "gallery-item portrait";
+      btn.dataset.full = s;
+      var im = document.createElement("img");
+      im.src = s;
+      im.alt = "";
+      im.loading = "lazy";
+      im.style.objectFit = "contain";
+      im.setAttribute("data-i18n-alt", key);
+      btn.appendChild(im);
+      fig.appendChild(btn);
+      if (im.complete && im.naturalWidth) {
+        btn.style.aspectRatio = im.naturalWidth + "/" + im.naturalHeight;
+      } else {
+        im.addEventListener("load", function () {
+          if (im.naturalWidth && im.naturalHeight) btn.style.aspectRatio = im.naturalWidth + "/" + im.naturalHeight;
+        });
+      }
+    });
+    var cap = document.createElement("figcaption");
+    cap.setAttribute("data-i18n", key);
+    fig.appendChild(cap);
   }
   fetch("data/site.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
     if (!d || !I) return;
